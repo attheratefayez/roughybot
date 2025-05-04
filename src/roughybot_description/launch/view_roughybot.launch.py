@@ -4,7 +4,7 @@ from launch import LaunchDescription
 from launch.conditions import IfCondition
 from launch.actions import DeclareLaunchArgument
 from launch_ros.actions import Node
-from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution, FindExecutable
+from launch.substitutions import LaunchConfiguration, Command, PathJoinSubstitution, FindExecutable, AndSubstitution
 from ament_index_python import get_package_share_directory
 
 def generate_launch_description():
@@ -98,7 +98,9 @@ def generate_launch_description():
     )
 
     joint_state_publisher_gui_node = Node(
-        condition = IfCondition(launch_joint_state_publisher_gui_lc),
+        condition = IfCondition(AndSubstitution(
+            launch_rviz_lc, launch_joint_state_publisher_gui_lc
+        )),
         package = "joint_state_publisher_gui", 
         executable = "joint_state_publisher_gui",
         output = "screen"

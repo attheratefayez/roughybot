@@ -27,7 +27,7 @@
 
     <gazebo>
         <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-            <parameters>package://roughybot_description/config/controller_config.yaml</parameters>
+            <parameters>$(find roughybot_description)/config/controller_config.yaml</parameters>
         </plugin>
     </gazebo>
 </robot>
