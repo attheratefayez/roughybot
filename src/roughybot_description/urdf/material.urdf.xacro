@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+    <xacro:macro name="material" params="name rgba ">
+        <material name="${name}">
+            <color rgba="${rgba}" />
+        </material>
+    </xacro:macro>
+
+    <xacro:material name="base_color" rgba="1 1 1 1" />
+    <xacro:material name="wheel_color" rgba="0.21 0.27 0.31 1" />
+    <xacro:material name="caster_wheel_color" rgba="0.827 0.827 0.827 1" />
+    <xacro:material name="lidar_color" rgba="1 0 0 1" />
+
+</robot>
