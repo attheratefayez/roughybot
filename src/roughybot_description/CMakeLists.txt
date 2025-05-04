@@ -12,7 +12,7 @@ set(roughybot_dependencies
 )
 
 foreach(dependency IN ITEMS ${roughybot_dependencies})
-    find_package(${deps} REQUIRED)
+    find_package(${dependency} REQUIRED)
 endforeach()
 
 
@@ -28,6 +28,10 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+install(DIRECTORY config
+    DESTINATION share/${PROJECT_NAME}
+)
+
 install(DIRECTORY launch
     DESTINATION share/${PROJECT_NAME}
 )
@@ -39,6 +43,5 @@ install(DIRECTORY meshes
 install(DIRECTORY urdf
     DESTINATION share/${PROJECT_NAME}
 )
-
 
 ament_package()

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="roughybot_sim" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="roughybot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <xacro:property name="base_mass" value="1.5"/>
     <xacro:property name="base_length" value="0.508"/>
@@ -15,8 +15,12 @@
 
     <xacro:include filename="inertial_macros.urdf.xacro"/>
     <xacro:include filename="material.urdf.xacro"/>
-    <xacro:include filename="ros2_control.urdf.xacro"/>
     <xacro:include filename="gazebo_params.gazebo"/>
+    <xacro:include filename="ros2_control.urdf.xacro"/>
+
+
+    <xacro:arg name="add_camera" default="true"/>
+    <xacro:arg name="add_lidar" default="true"/>
 
     <link name="base_footprint">
     </link>
@@ -35,7 +39,7 @@
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://roughybot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
                 <!-- <box size="${base_length} ${base_width} ${base_height}"/> -->
             </geometry>
             <material name="base_color"/>
@@ -44,7 +48,7 @@
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://roughybot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
             </geometry>
         </collision>
     </link>
@@ -65,7 +69,7 @@
         <visual>
             <origin xyz="0.214 0.1651 -0.040" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/right_wheel_link.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://roughybot_description/meshes/right_wheel_link.stl" scale="0.001 0.001 0.001"/>
                 <!-- <cylinder radius="${wheel_radius}" length="${wheel_length}"/> -->
             </geometry>
             <material name="wheel_color"/>
@@ -74,7 +78,7 @@
         <collision>
             <origin xyz="0.214 0.1651 -0.040" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/right_wheel_link.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://roughybot_description/meshes/right_wheel_link.stl" scale="0.001 0.001 0.001"/>
             </geometry>
         </collision>
     </link>
@@ -95,7 +99,7 @@
         <visual>
             <origin xyz="0.214 -0.1651 -0.040" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/left_wheel_link.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://roughybot_description/meshes/left_wheel_link.stl" scale="0.001 0.001 0.001"/>
                 <!-- <cylinder radius="${wheel_radius}" length="${wheel_length}"/> -->
             </geometry>
             <material name="wheel_color"/>
@@ -104,7 +108,7 @@
         <collision>
             <origin xyz="0.214 -0.1651 -0.040" rpy="0 0 0"/>
             <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/left_wheel_link.stl" scale="0.001 0.001 0.001"/>
+                <mesh filename="package://roughybot_description/meshes/left_wheel_link.stl" scale="0.001 0.001 0.001"/>
             </geometry>
         </collision>
     </link>
@@ -138,59 +142,71 @@
     </link>
 
     <!-- CAMERA LINK -->
-    <joint name="camera_joint" type="fixed">
-        <origin xyz="0.264 0 0.080" rpy="0 0 0"/>
-        <parent link="base_link"/>
-        <child link="camera_link"/>
-    </joint>
+    <xacro:if value="$(arg add_camera)">
+        <joint name="camera_joint" type="fixed">
+            <origin xyz="0.264 0 0.080" rpy="0 0 0"/>
+            <parent link="base_link"/>
+            <child link="camera_link"/>
+        </joint>
 
-    <link name="camera_link">
-        <xacro:inertial_box mass="${camera_mass}" x="0.025" y="0.088" z="0.021">
-            <origin xyz="0 0 0" rpy="0 0 1.57"/>
-        </xacro:inertial_box>
+        <link name="camera_link">
+            <xacro:inertial_box mass="${camera_mass}" x="0.025" y="0.088" z="0.021">
+                <origin xyz="0 0 0" rpy="0 0 1.57"/>
+            </xacro:inertial_box>
 
-        <visual>
-            <origin xyz="0 0 0" rpy="0 0 1.57"/>
-            <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/camera_link.stl" scale="0.001 0.001 0.001"/>
-            </geometry>
-            <material name="lidar_color"/>
-        </visual>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 1.57"/>
+                <geometry>
+                    <mesh filename="package://roughybot_description/meshes/camera_link.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="lidar_color"/>
+            </visual>
 
-        <collision>
-            <origin xyz="0 0 0" rpy="0 0 1.57"/>
-            <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/camera_link.stl" scale="0.001 0.001 0.001"/>
-            </geometry>
-        </collision>
-    </link>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 1.57"/>
+                <geometry>
+                    <mesh filename="package://roughybot_description/meshes/camera_link.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+
+        <joint name="optical_joint" type="fixed">
+            <parent link="camera_link"/>
+            <child link="optical_link"/>
+            <origin xyz="0 0 0" rpy="-1.57 0 -1.57"/>
+        </joint>
+
+        <link name="optical_link">
+        </link>
+    </xacro:if>
 
     <!-- LIDAR LINK -->
-    <joint name="lidar_joint" type="fixed">
-        <origin xyz="0.210 0 0.1016" rpy="0 0 0"/>
-        <parent link="base_link"/>
-        <child link="lidar_link"/>
-    </joint>
+    <xacro:if value="$(arg add_lidar)">
+        <joint name="lidar_joint" type="fixed">
+            <origin xyz="0.20 0 0.1016" rpy="0 0 0"/>
+            <parent link="base_link"/>
+            <child link="lidar_link"/>
+        </joint>
 
-    <link name="lidar_link">
-        <xacro:inertial_cylinder mass="${lidar_mass}" length="0.08" radius="0.052">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_cylinder>
+        <link name="lidar_link">
+            <xacro:inertial_cylinder mass="${lidar_mass}" length="0.08" radius="0.052">
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+            </xacro:inertial_cylinder>
 
-        <visual>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-            <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/lidar_link.stl" scale="0.001 0.001 0.001"/>
-            </geometry>
-            <material name="lidar_color"/>
-        </visual>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://roughybot_description/meshes/lidar_link.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="lidar_color"/>
+            </visual>
 
-        <collision>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-            <geometry>
-                <mesh filename="package://roughybot_sim/robot_description/meshes/lidar_link.stl" scale="0.001 0.001 0.001"/>
-            </geometry>
-        </collision>
-    </link>
-
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <mesh filename="package://roughybot_description/meshes/lidar_link.stl" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+        </link>
+    </xacro:if>
 </robot>
