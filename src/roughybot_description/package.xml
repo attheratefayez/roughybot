@@ -3,7 +3,7 @@
 <package format="3">
   <name>roughybot_description</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Test Robot</description>
   <maintainer email="faizurrahman.fayez@gmail.com">attheratefayez</maintainer>
   <license>MIT</license>
 

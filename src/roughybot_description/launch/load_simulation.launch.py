@@ -2,11 +2,10 @@ import os
 
 from ament_index_python import get_package_prefix, get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, TimerAction, AppendEnvironmentVariable, SetEnvironmentVariable
+from launch.actions import IncludeLaunchDescription, TimerAction, AppendEnvironmentVariable
 from launch_ros.actions import Node
 
 def generate_launch_description():
-
 
     gz_sim_env_var_update = AppendEnvironmentVariable(
         "GZ_SIM_RESOURCE_PATH", os.path.join(
