@@ -9,22 +9,13 @@ def generate_launch_description():
 
     pkg_dir = get_package_share_directory("roughybot_description")
 
-    controller_list = ["joint_state_broadcaster", "diff_drive_controller"]
-
-    controller_manager_node = Node(
-        package = "controller_manager",
-        executable = "ros2_control_node",
-        output = "screen",
-        parameters= [
-            os.path.join(pkg_dir, "config", "controller_config.yaml")
-        ]
-    )
+    controller_list = ["joint_state_broadcaster", "diff_drive_base_controller"]
 
     controller_spawner_node = Node(
         package = "controller_manager",
         executable = "spawner",
         output = "screen",
-        arguments = controller_list + ["--params-file", os.path.join(pkg_dir, "config", "controller_config.yaml")],
+        arguments = controller_list + ["--param-file", os.path.join(pkg_dir, "config", "controller_config.yaml")],
         remappings=[("joint_state_broadcaster/joint_states", "/joint_states")]
     )
 
@@ -38,7 +29,6 @@ def generate_launch_description():
 
 
     return LaunchDescription([
-        controller_manager_node, 
         delayed_controller_spawner
     ])
 
